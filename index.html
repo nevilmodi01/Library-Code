@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdf6e3; /* Classic parchment color */
+            margin: 0;
+            padding: 0;
+            transition: background-color 5s ease; /* Smooth background color change */
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #b58900; /* Classic color */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #d9a70b;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px; /* Medium size for book list */
+            margin: 0 auto;
+        }
+        ul li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 5s ease; /* Smooth color change */
+        }
+        .book-details {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .book-img, .no-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+        .book-info {
+            flex: 1;
+            text-align: center;
+        }
+        .remove-text {
+            color: #ff4d4d;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .remove-text:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Library Book Details</h1>
+    <form id="bookForm">
+        <label for="bookName">Book Name:</label>
+        <input type="text" id="bookName" name="bookName" required>
+        <label for="authorName">Author Name:</label>
+        <input type="text" id="authorName" name="authorName" required>
+        <label for="bookPhoto">Book Photo:</label>
+        <input type="file" id="bookPhoto" name="bookPhoto" accept="image/*">
+        <button type="submit">Add Book</button>
+    </form>
+
+    <h2>Books in Library:</h2>
+    <ul id="bookList"></ul>
+
+    <script>
+        const bookForm = document.getElementById('bookForm');
+        const bookList = document.getElementById('bookList');
+
+        // Function to generate a random classic color
+        function getRandomColor() {
+            const colors = ['#f8f9fa', '#e9ecef', '#dee2e6', '#ced4da', '#adb5bd', '#fff3e0', '#ffe0b2', '#ffcc80', '#ffb74d', '#ffa726', '#ff7043', '#ff5722', '#e64a19', '#d84315', '#bf360c', '#ffecb3', '#ffe082', '#ffd54f', '#ffca28', '#ffc107', '#ffb300', '#ffa000', '#ff8f00', '#ff6f00', '#fff8e1', '#ffecb3', '#ffe082', '#ffd54f', '#ffca28', '#ffc107', '#ffb300', '#ffa000', '#ff8f00', '#ff6f00', '#fffde7', '#fff9c4', '#fff59d', '#fff176', '#ffee58', '#ffeb3b', '#fdd835', '#fbc02d', '#f9a825', '#f57f17'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Function to change background color every 5 seconds
+        function changeBackgroundColor() {
+            document.body.style.backgroundColor = getRandomColor();
+        }
+        setInterval(changeBackgroundColor, 5000); // Change color every 5 seconds
+
+        bookForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const bookName = document.getElementById('bookName').value;
+            const authorName = document.getElementById('authorName').value;
+            const bookPhoto = document.getElementById('bookPhoto').files[0];
+
+            const li = document.createElement('li');
+            li.style.backgroundColor = getRandomColor();
+
+            const bookDetailsDiv = document.createElement('div');
+            bookDetailsDiv.classList.add('book-details');
+
+            if (bookPhoto) {
+                const img = document.createElement('img');
+                img.classList.add('book-img');
+                img.src = URL.createObjectURL(bookPhoto);
+                bookDetailsDiv.appendChild(img);
+            } else {
+                const noImageDiv = document.createElement('div');
+                noImageDiv.classList.add('no-image');
+                noImageDiv.textContent = 'No Image';
+                bookDetailsDiv.appendChild(noImageDiv);
+            }
+
+            const bookInfo = document.createElement('div');
+            bookInfo.classList.add('book-info');
+            bookInfo.innerHTML = `<strong>Book:</strong> ${bookName} <br> <strong>Author:</strong> ${authorName}`;
+            bookDetailsDiv.appendChild(bookInfo);
+
+            const removeText = document.createElement('span');
+            removeText.textContent = 'Remove';
+            removeText.classList.add('remove-text');
+            removeText.addEventListener('click', function() {
+                li.remove();
+            });
+
+            li.appendChild(bookDetailsDiv);
+            li.appendChild(removeText);
+            bookList.appendChild(li);
+
+            bookForm.reset();
+        });
+    </script>
+</body>
+</html>
