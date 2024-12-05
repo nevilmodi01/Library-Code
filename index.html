@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fdf6e3; /* Classic parchment color */
+            background-color: #e9ecef; /* Classic parchment color */
             margin: 0;
             padding: 0;
-            transition: background-color 5s ease; /* Smooth background color change */
+            /* Removed background color change transition */
         }
-        h1, h2 {
+        h1, h2, h4 {
             text-align: center;
             color: #333;
         }
@@ -66,7 +66,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: background-color 5s ease;
         }
         .book-details {
             display: flex;
@@ -94,13 +93,17 @@
             flex: 1;
             text-align: center;
         }
-        .remove-text {
+        .remove-text, .student-details {
             color: #ff4d4d;
             cursor: pointer;
             margin-left: 10px;
         }
-        .remove-text:hover {
+        .remove-text:hover, .student-details:hover {
             text-decoration: underline;
+        }
+        .student-details img {
+            width: 20px; /* Set the icon size to 20px */
+            height: 20px;
         }
         @media (max-width: 600px) {
             ul li {
@@ -111,7 +114,7 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .book-info, .remove-text {
+            .book-info, .remove-text, .student-details {
                 text-align: left;
                 margin-left: 0;
             }
@@ -129,35 +132,20 @@
         <input type="file" id="bookPhoto" name="bookPhoto" accept="image/*">
         <button type="submit">Add Book</button>
     </form>
-
     <h2>Books in Library:</h2>
+    <h4>**Enter Student details in + icon Who Borrowed Book**</h4>
     <ul id="bookList"></ul>
-
     <script>
         const bookForm = document.getElementById('bookForm');
         const bookList = document.getElementById('bookList');
 
-        // Function to generate a random classic color
-        function getRandomColor() {
-            const colors = ['#f8f9fa', '#e9ecef', '#dee2e6', '#ced4da', '#adb5bd', '#fff3e0', '#ffe0b2', '#ffcc80', '#ffb74d', '#ffa726', '#ff7043', '#ff5722', '#e64a19', '#d84315', '#bf360c', '#ffecb3', '#ffe082', '#ffd54f', '#ffca28', '#ffc107', '#ffb300', '#ffa000', '#ff8f00', '#ff6f00', '#fff8e1', '#ffecb3', '#ffe082', '#ffd54f', '#ffca28', '#ffc107', '#ffb300', '#ffa000', '#ff8f00', '#ff6f00', '#fffde7', '#fff9c4', '#fff59d', '#fff176', '#ffee58', '#ffeb3b', '#fdd835', '#fbc02d', '#f9a825', '#f57f17'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        // Function to change background color every 5 seconds
-        function changeBackgroundColor() {
-            document.body.style.backgroundColor = getRandomColor();
-        }
-        setInterval(changeBackgroundColor, 5000); // Change color every 5 seconds
-
         bookForm.addEventListener('submit', function(event) {
             event.preventDefault();
-
             const bookName = document.getElementById('bookName').value;
             const authorName = document.getElementById('authorName').value;
             const bookPhoto = document.getElementById('bookPhoto').files[0];
 
             const li = document.createElement('li');
-            li.style.backgroundColor = getRandomColor();
 
             const bookDetailsDiv = document.createElement('div');
             bookDetailsDiv.classList.add('book-details');
@@ -186,7 +174,29 @@
                 li.remove();
             });
 
+            const studentDetails = document.createElement('span');
+            const addStudentIcon = document.createElement('img');
+            addStudentIcon.src = 'https://i.ibb.co/ZJbXQtB/add.png'; // Replace with the file path to your icon image
+            addStudentIcon.alt = 'Add Student';
+            studentDetails.appendChild(addStudentIcon);
+            studentDetails.classList.add('student-details');
+            studentDetails.addEventListener('click', function() {
+                const studentName = prompt('Student Name:');
+                const studentID = prompt('Student ID:');
+                const fromDate = prompt('From Date (YYYY-MM-DD):');
+                const toDate = prompt('To Date (YYYY-MM-DD):');
+                const work = prompt('Work:');
+
+                if (studentName && studentID && fromDate && toDate && work) {
+                    const studentDetailsDiv = document.createElement('div');
+                    studentDetailsDiv.classList.add('student-detail');
+                    studentDetailsDiv.innerHTML = `<br><strong>Borrowed By:</strong> ${studentName} <br> <strong>ID:</strong> ${studentID} <br> <strong>From:</strong> ${fromDate} <br> <strong>To:</strong> ${toDate} <br> <strong>Work:</strong> ${work}`;
+                    bookInfo.appendChild(studentDetailsDiv);
+                }
+            });
+
             li.appendChild(bookDetailsDiv);
+            li.appendChild(studentDetails);
             li.appendChild(removeText);
             bookList.appendChild(li);
 
