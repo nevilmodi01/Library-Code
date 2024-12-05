@@ -54,7 +54,7 @@
         ul {
             list-style-type: none;
             padding: 0;
-            max-width: 600px; /* Medium size for book list */
+            max-width: 600px;
             margin: 0 auto;
         }
         ul li {
@@ -66,12 +66,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: background-color 5s ease; /* Smooth color change */
+            transition: background-color 5s ease;
         }
         .book-details {
             display: flex;
             align-items: center;
             width: 100%;
+            flex-wrap: wrap;
         }
         .book-img, .no-image {
             width: 50px;
@@ -100,6 +101,20 @@
         }
         .remove-text:hover {
             text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            ul li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .book-details {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .book-info, .remove-text {
+                text-align: left;
+                margin-left: 0;
+            }
         }
     </style>
 </head>
